@@ -10,10 +10,12 @@ void criarTabela()
 	int ctrl = 0,op,pkop;
 	bool pk = false;
 	char tmp[50];
-	FILE *f;
+	FILE *f,*list;
 	printf("\nDigite o nome da sua tabela: ");
 	scanf("%s",&tmp);
 	f = fopen(tmp,"w");
+	list = fopen("listadetabelas.txt","a");
+	fprintf(list,"%s\n",tmp);
 	while(ctrl != -1)
 	{
 		printf("\nDigite o tipo de variavel que deseja adicionar\n1- char\n2- float\n3- double\n4- int\n5- string\n6- Finalizar\n");
@@ -28,15 +30,15 @@ void criarTabela()
 					printf("\nA variavel eh chave primaria?\n1- sim\n2- nao");
 					scanf("%d",&pkop);
 					if(pkop == 1){
-						fprintf(f,"PK CHAR %s ",tmp);
+						fprintf(f,"*PK CHAR %s",tmp);
 						pk = true;
 					}else if(pkop == 2)
 					{
-						fprintf(f,"CHAR %s ",tmp);
+						fprintf(f,"*CHAR %s",tmp);
 					}
 				}else
 				{
-					fprintf(f,"CHAR %s ",tmp);	
+					fprintf(f,"*CHAR %s",tmp);	
 				}
 			break;
 			case 2:
@@ -47,15 +49,15 @@ void criarTabela()
 					printf("\nA variavel eh chave primaria?\n1- sim\n2- nao\n");
 					scanf("%d",&pkop);
 					if(pkop == 1){
-						fprintf(f,"PK FLOAT %s ",tmp);
+						fprintf(f,"*PK FLOAT %s",tmp);
 						pk = true;
 					}else if(pkop == 2)
 					{
-						fprintf(f,"FLOAT %s ",tmp);
+						fprintf(f,"*FLOAT %s",tmp);
 					}
 				}else
 				{
-					fprintf(f,"FLOAT %s ",tmp);	
+					fprintf(f,"*FLOAT %s",tmp);	
 				}
 			break;
 			case 3:	
@@ -66,15 +68,15 @@ void criarTabela()
 					printf("\nA variavel eh chave primaria?\n1- sim\n2- nao\n");
 					scanf("%d",&pkop);
 					if(pkop == 1){
-						fprintf(f,"PK DOUBLE %s ",tmp);
+						fprintf(f,"*PK DOUBLE %s",tmp);
 						pk = true;
 					}else if(pkop == 2)
 					{
-						fprintf(f,"DOUBLE %s ",tmp);
+						fprintf(f,"*DOUBLE %s",tmp);
 					}
 				}else
 				{
-					fprintf(f,"DOUBLE %s ",tmp);	
+					fprintf(f,"*DOUBLE %s",tmp);	
 				}
 			break;
 			case 4:
@@ -85,15 +87,15 @@ void criarTabela()
 					printf("\nA variavel eh chave primaria?\n1- sim\n2- nao\n");
 					scanf("%d",&pkop);
 					if(pkop == 1){
-						fprintf(f,"PK INT %s ",tmp);
+						fprintf(f,"*PK INT %s",tmp);
 						pk = true;
 					}else if(pkop == 2)
 					{
-						fprintf(f,"INT %s ",tmp);
+						fprintf(f,"*INT %s",tmp);
 					}
 				}else
 				{
-					fprintf(f,"INT %s ",tmp);	
+					fprintf(f,"*INT %s",tmp);	
 				}
 			break;
 			case 5:
@@ -104,15 +106,15 @@ void criarTabela()
 					printf("\nA variavel eh chave primaria?\n1- sim\n2- nao\n");
 					scanf("%d",&pkop);
 					if(pkop == 1){
-						fprintf(f,"PK STRING %s ",tmp);
+						fprintf(f,"*PK STRING %s",tmp);
 						pk = true;
 					}else if(pkop == 2)
 					{
-						fprintf(f,"STRING %s ",tmp);
+						fprintf(f,"*STRING %s",tmp);
 					}
 				}else
 				{
-					fprintf(f,"STRING %s ",tmp);	
+					fprintf(f,"*STRING %s",tmp);	
 				}
 			break;
 			case 6:
@@ -126,8 +128,64 @@ void criarTabela()
 void addlinhaTabela()
 {
 	char tmp[50];
+	int count = 1;
 	FILE *f;
-	int ctrl = 0;
+	int ctrl = 0,i;
+	while(ctrl != -1)
+	{
+		printf("\nDigite o nome da tabela: ");
+		scanf("%s",&tmp);
+		f = fopen(tmp,"a");
+		if(f == NULL){
+			printf("\n Tabela nao existe.");
+		}else
+		{
+			while()
+			{
+				if (count == 1)
+				{
+					printf("Digite o valor para a variavel %d: ",count);
+					scanf("%s",&tmp);
+					fprintf(f, "*%s",tmp);
+				}else
+				{
+					printf("Deseja adicionar outro valor?\n1- sim\n2- nao");
+					scanf("%d",&i)
+					if (i == 1)
+					{
+						printf("Digite o valor para a variavel %d: ",count);
+						scanf("%s",&tmp);
+						fprintf(f, "*%s",tmp);
+					}else if (i == 2)
+					{
+						ctrl = -1;
+					}
+				}				
+			}
+		}
+	}
+	fclose(f);	
+}
+//lista todas as tabelas no sistema
+void listarTabelas()
+{
+	FILE *f;
+	char linha[200];
+	f = fopen("listadetabelas.txt","r");
+	while(!feof(f))
+	{
+		fgets(linha,200,f);
+		printf("%s\n",linha);
+	}
+
+}
+//lista os dados de uma certa tabela
+void listarDadosTabela()
+{
+	char tmp[50];
+	FILE *f;
+	int ctrl = 0,i,j;
+	char linha[200];
 	while(ctrl != -1)
 	{
 		printf("\nDigite o nome da tabela: ");
@@ -137,19 +195,15 @@ void addlinhaTabela()
 			printf("\n Tabela nao existe.");
 		}else
 		{
-			printf("\nTabela existe");
+			while(!feof(f))
+			{
+				fgets(linha,200,f);
+				printf("%s\n",linha);
+			}
+			ctrl = -1;
+			fclose(f);
 		}
-	}	
-}
-//lista todas as tabelas no sistema
-void listarTabelas()
-{
-	
-}
-//lista os dados de uma certa tabela
-void listarDadosTabela()
-{
-	
+	}
 }
 //pesquisa valor em uma tabela
 void pesquisarTabela()
@@ -157,9 +211,24 @@ void pesquisarTabela()
 	
 }
 //apaga tabela
-void apagarTabela()
+void apagarValorTabela()
 {
-
+	char tmp[50];
+	FILE *f;
+	int ctrl = 0,i,j;
+	while(ctrl != -1)
+	{
+		printf("\nDigite o nome da tabela: ");
+		scanf("%s",&tmp);
+		f = fopen(tmp,"r+");
+		if(f == NULL){
+			printf("\n Tabela nao existe.");
+		}else
+		{
+			remove(tmp);
+			ctrl = -1;
+		}
+	}
 }
 int main(int argc, char const *argv[])
 {
@@ -176,17 +245,20 @@ int main(int argc, char const *argv[])
 		{
 			case 1:
 				criarTabela();
-				addlinhaTabela();
 			break;
 			case 2:
+				listarTabelas();
 			break;
 			case 3:
+				addlinhaTabela();
 			break;
 			case 4:
+				listarDadosTabela();
 			break;
 			case 5:
 			break;
 			case 6:
+				apagarValorTabela();
 			break;
 			case 7:
 				ctrl = -1;
