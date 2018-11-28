@@ -6,20 +6,19 @@
 int numVariaveisTabela(char arquivo[])
 {
 	FILE *in;
+	int i = 0;
 	char c;
-	int count;
-	bool x =  false;
 	in = fopen(arquivo,"r");
 	do
 	{
 		c = fgetc(in);
 		if (c == '*')
 		{
-			count++;
+			i++;
 		}
-	}while(c != EOF);
+	}while(c != '\n');
 	fclose(in);
-	return count;
+	return i;
 }
 void criarTabela()
 {
@@ -96,7 +95,8 @@ void criarTabela()
 void deletarTabela()
 {
 	char tmp[50];
-	FILE *in;
+	FILE *in,*list;
+	list = fopen("listadetabelas.txt","r");
 	printf("Digite o nome da tabela a ser excluida: \n");
 	scanf("%s",&tmp);
 	remove(tmp);
@@ -137,16 +137,19 @@ void listarDadosTabela()
 		fclose(f);
 	}
 }
-void addLinhaTabela()
-{
-
-}
-void pesquisarTabela()
-{
-}
-void apagaLinhaTabela(char arquivo[],char id[])
+void addLinhaTabela(char arquivo[])
 {
 	FILE *in;
+	in = fopen(arquivo,"a");
+}
+void pesquisarTabela(char arquivo[],char id[])
+{
+	
+	
+}
+void apagaLinhaTabela(char *arquivo,char *id)
+{
+	FILE *in,*tmp;
 	int count = 0,count2,i = 0,j = 1,op;
 	char linha[1000], *compare;
 	bool x = false;
@@ -179,17 +182,17 @@ void apagaLinhaTabela(char arquivo[],char id[])
       		j++;
       		if (strcmp(id,compare) == 0)
 			{
-				printf("Deletar linha %d ?\n",j/5);
+				printf("Deletar linha %d ?\n",j/numVariaveisTabela(arquivo));
 				break;
 			}
    		}
    		while(1)
    		{
-   		printf("1-sim\n2-nao");
+   		printf("1-sim\n2-nao\n");
    		scanf("%d",&op);
-   			if (op == 1)
+   			if (op == 1)	
    			{
-   				//codigo para excluir linha aqui
+   		  
    			}else if (op == 2)
    			{
    				break;
@@ -202,9 +205,57 @@ void apagaLinhaTabela(char arquivo[],char id[])
 
 }
 int main(int argc, char const *argv[])
-{	
-	printf("%d",numVariaveisTabela("tabelinha"));
-	//apagaLinhaTabela("tabelinha","55");
-	
-	return 0;
+{
+while(1)
+	{	
+		int op;
+		char *nome,str_id[30];
+
+		printf("---------------------------------------------------------------------------------------------------------------\n");
+		printf("-----------------------------------------------------MENU------------------------------------------------------\n");
+		printf("-- 1 - Ver tabelas cadastradas       **************  **************  ***********    ***********      ----------\n");
+		printf("-- 2 - Ver tabela especifica         **************  **************  *************  *************    ----------\n");
+		printf("-- 3 - Adicionar dados em uma tabela ***             ***             ***       ***  ***       ****   ----------\n");
+		printf("-- 4 - Pesquisar dados em uma tabela **************  ***      *****  ************   ***        ****  ----------\n");
+		printf("-- 5 - Deletar  dados de uma tabela  **************  ***      *****  ************   ***        ****  ----------\n");
+		printf("-- 6 - Criar uma Tabela                         ***  ***        ***  ***       ***  ***       ****   ----------\n");
+		printf("-- 7 - Deletar uma Tabela            **************  **************  *************  *************    ----------\n");
+		printf("-- 8 - Sair do sistema               **************  **************  ***********    ***********      ----------\n");
+		printf("---------------------------------------------------------------------------------------------------------------\n");
+		printf("---------------------------------------------------------------------------------------------------------------\n");
+		scanf("%d",&op);
+		switch(op)
+		{
+			case 1:
+				listarTabelas();
+			break;
+			case 2:
+				listarDadosTabela();
+			break;
+			case 3:
+				//addLinhaTabela();
+			break;
+			case 4:
+				//pesquisarTabela();
+			break;
+			case 5:
+				printf("Qual o nome da tabela a qual deseja excluir dadosa?\n");
+				scanf("%s",&nome);
+				printf("Qual o valor da chave primaria?\n");
+				scanf("%s",&str_id);
+				apagaLinhaTabela(*nome,*str_id);
+			break;
+			case 6:
+				criarTabela();
+			break;
+			case 7:
+				deletarTabela();
+			break;
+			case 8:
+				return 1;
+			break;
+			default:
+				printf("Operacao invalida.\n");
+		}
+	}
 }
