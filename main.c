@@ -61,7 +61,7 @@ void criarTabela()
 					printf("\nA variavel eh chave primaria?\n1- sim\n2- nao\n");
 					scanf("%d",&pkop);
 					if(pkop == 1){
-						fprintf(f,"*PK UNASSIGNED INT %s",tmp);
+						fprintf(f,"*PK UNSIGNED INT %s",tmp);
 						pk = true;
 					}else if(pkop == 2)
 					{
@@ -155,6 +155,7 @@ void apagaLinhaTabela(char *arquivo,char *id)
 	bool x = false;
 	const char div[2] = "*";
 	in = fopen(arquivo,"r");
+	tmp = fopen("tmp.txt","w");
 	if (in == NULL)
 	{
 		printf("Tabela nao existe\n");
@@ -192,7 +193,16 @@ void apagaLinhaTabela(char *arquivo,char *id)
    		scanf("%d",&op);
    			if (op == 1)	
    			{
-   		  
+   				int y = 0;
+   		  		rewind(in);
+   		  		while(!feof(in))
+   		  		{
+   		  			if (y != j/numVariaveisTabela(arquivo))
+   		  			{
+   		 				fgets(linha,1000,in);
+   		 				fprintf(tmp,"%s",linha);
+   		  			}
+   		  		}
    			}else if (op == 2)
    			{
    				break;
